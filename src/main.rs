@@ -1,4 +1,4 @@
-use std::{fs, io};
+use std::{collections::BinaryHeap, fs, io};
 
 const INPUT_FILENAME: &str = "./inputs/input.txt";
 
@@ -27,33 +27,25 @@ fn read_input(filename: &str) -> Result<Vec<Vec<i32>>, io::Error> {
 }
 
 fn find_max_calories(elf_packs: Vec<Vec<i32>>) -> i32 {
-    let mut max = -1;
-    for elf_pack in elf_packs {
-        let calories = elf_pack.iter().fold(0, |acc, curr| acc + curr);
-        if calories > max {
-            max = calories;
-        }
-    }
-    return max;
+    let result = elf_packs
+        .iter()
+        .map(|elf_pack| elf_pack.iter().sum())
+        .max()
+        .unwrap_or_default();
+    return result;
 }
 
-fn find_top3_calories(elf_packs: &Vec<Vec<i32>>) -> [i32; 3] {
-    let mut max = -1;
-    for elf_pack in elf_packs {
-        let calories = elf_pack.iter().fold(0, |acc, curr| acc + curr);
-        if calories > max {
-            max = calories;
-        }
-    }
-
-    let mut sorted_calories: Vec<i32> = elf_packs
+fn find_top3_calories(elf_packs: Vec<Vec<i32>>) -> [i32; 3] {
+    let mut calories_heap = elf_packs
         .iter()
-        .map(|elf_pack| elf_pack.iter().fold(0, |acc, curr| acc + curr))
-        .collect();
-    sorted_calories.sort();
-    sorted_calories.reverse();
+        .map(|elf_pack| elf_pack.iter().sum())
+        .collect::<BinaryHeap<i32>>();
 
-    return [sorted_calories[0], sorted_calories[1], sorted_calories[2]];
+    return [
+        calories_heap.pop().unwrap_or_default(),
+        calories_heap.pop().unwrap_or_default(),
+        calories_heap.pop().unwrap_or_default(),
+    ];
 }
 
 fn part1() -> Result<(), io::Error> {
@@ -65,10 +57,10 @@ fn part1() -> Result<(), io::Error> {
 fn part2() -> Result<(), io::Error> {
     let input = read_input(INPUT_FILENAME)?;
 
-    let top3 = find_top3_calories(&input);
+    let top3 = find_top3_calories(input);
     println!("Top 3 elves with most calories: {:#?}", top3);
     println!("Total: {}", top3.iter().sum::<i32>());
-    
+
     return Ok(());
 }
 
