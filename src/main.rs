@@ -56,30 +56,27 @@ fn find_top3_calories(elf_packs: &Vec<Vec<i32>>) -> [i32; 3] {
     return [sorted_calories[0], sorted_calories[1], sorted_calories[2]];
 }
 
-fn part1() {
-    let file_lines = read_input(INPUT_FILENAME);
-    match file_lines {
-        Ok(input) => println!("Elf with most calories: {}", find_max_calories(input)),
-        Err(e) => println!("called `Result::unwrap()` on an `Err` value: {}", &e),
-    }
+fn part1() -> Result<(), io::Error> {
+    let input = read_input(INPUT_FILENAME)?;
+    println!("Elf with most calories: {}", find_max_calories(input));
+    return Ok(());
 }
 
-fn part2() {
-    let file_lines = read_input(INPUT_FILENAME);
-    match file_lines {
-        Ok(input) => {
-            let top3 = find_top3_calories(&input);
-            println!("Top 3 elves with most calories: {:#?}", top3);
-            println!("Total: {}", top3.iter().sum::<i32>())
-        }
-        Err(e) => println!("called `Result::unwrap()` on an `Err` value: {}", &e),
-    }
+fn part2() -> Result<(), io::Error> {
+    let input = read_input(INPUT_FILENAME)?;
+
+    let top3 = find_top3_calories(&input);
+    println!("Top 3 elves with most calories: {:#?}", top3);
+    println!("Total: {}", top3.iter().sum::<i32>());
+    
+    return Ok(());
 }
 
-fn main() {
+fn main() -> Result<(), io::Error> {
     println!("Part1:");
-    part1();
+    part1()?;
     println!("======");
     println!("Part2:");
-    part2();
+    part2()?;
+    return Ok(());
 }
