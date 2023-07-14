@@ -3,11 +3,10 @@ use std::{collections::BinaryHeap, fs, io};
 const INPUT_FILENAME: &str = "./inputs/input.txt";
 
 fn read_input(filename: &str) -> Result<Vec<Vec<i32>>, io::Error> {
-    let binding = fs::read_to_string(filename)?;
-    let lines = binding.lines();
-    let mut elf_packs: Vec<Vec<i32>> = vec![];
-    elf_packs.push(vec![]);
+    let file_text = fs::read_to_string(filename)?;
+    let lines = file_text.lines();
 
+    let mut elf_packs: Vec<Vec<i32>> = vec![vec![]];
     let mut curr_pack = &mut elf_packs[0];
 
     for line in lines {
