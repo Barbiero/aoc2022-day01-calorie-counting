@@ -23,17 +23,15 @@ fn read_input(filename: &str) -> Result<Vec<Vec<i32>>> {
     let mut elf_packs: Vec<Vec<i32>> = vec![vec![]];
     let mut curr_pack = &mut elf_packs[0];
 
-    for line in lines {
-        if let Ok(line) = line {
-            let parsed_line = line.parse::<i32>();
-            match parsed_line {
-                Ok(calories) => {
-                    curr_pack.push(calories);
-                }
-                Err(_) => {
-                    elf_packs.push(vec![]);
-                    curr_pack = elf_packs.last_mut().unwrap();
-                }
+    for line in lines.flatten() {
+        let parsed_line = line.parse::<i32>();
+        match parsed_line {
+            Ok(calories) => {
+                curr_pack.push(calories);
+            }
+            Err(_) => {
+                elf_packs.push(vec![]);
+                curr_pack = elf_packs.last_mut().unwrap();
             }
         }
     }
